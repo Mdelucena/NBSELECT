@@ -15,11 +15,11 @@ const valores = [
 
 export default function Valores() {
   return (
-    <section style={{
+    <section className="val-section" style={{
       backgroundColor: '#f5f5f5',
       padding: '60px 48px',
     }}>
-      <div style={{
+      <div className="val-inner" style={{
         maxWidth: '1400px',
         margin: '0 auto',
         backgroundColor: '#0A0A0A',
@@ -53,7 +53,7 @@ export default function Valores() {
         </h2>
 
         {/* 3 valores */}
-        <div style={{
+        <div className="val-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '0',
@@ -105,9 +105,14 @@ export default function Valores() {
 
       <style>{`
         @media (max-width: 768px) {
-          #valores-grid {
-            grid-template-columns: 1fr !important;
-          }
+          .dep-section { padding: 48px 20px !important; }
+          .dep-grid { grid-template-columns: 1fr !important; }
+          .val-section { padding: 32px 16px !important; }
+          .val-inner { padding: 36px 24px !important; }
+          .val-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+          .val-grid > div { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; border-bottom: 1px solid #222; padding-bottom: 20px !important; }
+          .serv-section { padding: 110px 20px 60px !important; }
+          .serv-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

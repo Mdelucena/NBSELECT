@@ -1,31 +1,67 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import logo from '../assets/image/logo.png'
 
 const servicos = [
-  { label: 'PPF', href: '#servicos' },
-  { label: 'Vitrificação', href: '#servicos' },
-  { label: 'Lavagem Premium', href: '#servicos' },
+  { label: 'PPF', path: '/ppf' },
+  { label: 'Vitrificação', path: '/vitrificacao' },
+  { label: 'Lavagem Premium', path: '/lavagens' },
 ]
 
 const links = [
-  { label: 'Sobre', href: '#sobre' },
-  { label: 'Contato', href: '#contato' },
+  { label: 'Sobre', hash: '#sobre' },
+  { label: 'Contato', hash: '#contato' },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [dropOpen, setDropOpen] = useState(false)
+  const dropRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
+        setDropOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const goHome = () => {
+    setOpen(false)
+    navigate('/')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const goHash = (hash: string) => {
+    setOpen(false)
+    setDropOpen(false)
+    if (location.pathname === '/') {
+      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      navigate('/' + hash)
+    }
+  }
+
+  const goPage = (path: string) => {
+    setOpen(false)
+    setDropOpen(false)
+    navigate(path)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <nav style={{
       backgroundColor: '#0A0A0A',
       borderBottom: '3px solid #C9A84C',
-      position: 'sticky',
-      top: 0,
+      position: 'relative',
       zIndex: 50,
     }}>
-      <div style={{
+      <div className="nav-bar" style={{
         width: '100%',
         padding: '0 32px',
         height: '140px',
@@ -35,14 +71,15 @@ export default function Navbar() {
       }}>
 
         {/* Logo + tagline */}
-        <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '16px', textDecoration: 'none' }}>
+        <a onClick={goHome} style={{ display: 'flex', alignItems: 'center', gap: '16px', textDecoration: 'none', cursor: 'pointer' }}>
           <img
             src={logo}
             alt="NBSelect"
+            className="nav-logo"
             style={{ height: '180px', width: 'auto', objectFit: 'contain' }}
           />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{
+            <span className="nav-tagline" style={{
               color: '#C9A84C',
               fontFamily: 'Barlow Condensed, sans-serif',
               fontWeight: 700,
@@ -60,29 +97,29 @@ export default function Navbar() {
         <div className="desk-nav" style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
 
           {/* Início */}
-          <a
-            href="#"
+          <button
+            onClick={goHome}
             style={{
+              background: 'none', border: 'none', cursor: 'pointer',
               color: '#fff',
-              textDecoration: 'none',
               fontSize: '13px',
               fontFamily: 'Barlow, sans-serif',
               fontWeight: 600,
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               transition: 'color 0.2s',
+              padding: 0,
             }}
             onMouseEnter={e => (e.currentTarget.style.color = '#C9A84C')}
             onMouseLeave={e => (e.currentTarget.style.color = '#fff')}
           >
             Início
-          </a>
+          </button>
 
           {/* Dropdown Serviços */}
           <div
+            ref={dropRef}
             style={{ position: 'relative' }}
-            onMouseEnter={() => setDropOpen(true)}
-            onMouseLeave={() => setDropOpen(false)}
           >
             <button style={{
               background: 'none',
@@ -99,7 +136,9 @@ export default function Navbar() {
               alignItems: 'center',
               gap: '6px',
               padding: 0,
-            }}>
+            }}
+            onClick={() => setDropOpen(prev => !prev)}
+            >
               Serviços
               <span style={{ fontSize: '10px', transition: 'transform 0.2s', display: 'inline-block', transform: dropOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
             </button>
@@ -120,14 +159,18 @@ export default function Navbar() {
                 zIndex: 100,
               }}>
                 {servicos.map((s) => (
-                  <a
+                  <button
                     key={s.label}
-                    href={s.href}
+                    onClick={() => goPage(s.path)}
                     style={{
                       display: 'block',
+                      width: '100%',
+                      textAlign: 'left',
                       padding: '14px 20px',
                       color: '#ccc',
-                      textDecoration: 'none',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
                       fontSize: '12px',
                       fontFamily: 'Barlow, sans-serif',
                       fontWeight: 600,
@@ -146,31 +189,32 @@ export default function Navbar() {
                     }}
                   >
                     {s.label}
-                  </a>
+                  </button>
                 ))}
               </div>
             )}
           </div>
 
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
+            <button
+              key={l.hash}
+              onClick={() => goHash(l.hash)}
               style={{
+                background: 'none', border: 'none', cursor: 'pointer',
                 color: '#fff',
-                textDecoration: 'none',
                 fontSize: '13px',
                 fontFamily: 'Barlow, sans-serif',
                 fontWeight: 600,
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 transition: 'color 0.2s',
+                padding: 0,
               }}
               onMouseEnter={e => (e.currentTarget.style.color = '#C9A84C')}
               onMouseLeave={e => (e.currentTarget.style.color = '#fff')}
             >
               {l.label}
-            </a>
+            </button>
           ))}
           <a
             href="https://wa.me/5500000000000"
@@ -215,26 +259,61 @@ export default function Navbar() {
           flexDirection: 'column',
           gap: '18px',
         }}>
+          {/* Início */}
+          <button
+            onClick={goHome}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              color: '#fff', fontSize: '13px', fontFamily: 'Barlow, sans-serif',
+              fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'left',
+            }}
+          >
+            Início
+          </button>
+
+          {/* Serviços expandido */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            <span style={{
+              color: '#C9A84C', fontSize: '13px', fontFamily: 'Barlow, sans-serif',
+              fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '10px',
+            }}>
+              Serviços
+            </span>
+            {servicos.map((s) => (
+              <button
+                key={s.label}
+                onClick={() => goPage(s.path)}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#aaa', fontSize: '13px', fontFamily: 'Barlow, sans-serif',
+                  fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', textAlign: 'left',
+                  paddingLeft: '12px', borderLeft: '2px solid #C9A84C44',
+                  paddingTop: '6px', paddingBottom: '6px',
+                }}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
+            <button
+              key={l.hash}
+              onClick={() => goHash(l.hash)}
               style={{
-                color: '#fff',
-                textDecoration: 'none',
-                fontSize: '13px',
-                fontFamily: 'Barlow, sans-serif',
-                fontWeight: 600,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                color: '#fff', fontSize: '13px', fontFamily: 'Barlow, sans-serif',
+                fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'left',
               }}
             >
               {l.label}
-            </a>
+            </button>
           ))}
           <a
-            href="https://wa.me/5500000000000"
+            href="https://wa.me/5581920008301"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
             style={{
               backgroundColor: '#C9A84C',
               color: '#000',
@@ -257,6 +336,9 @@ export default function Navbar() {
         @media (max-width: 768px) {
           .desk-nav { display: none !important; }
           .mob-toggle { display: block !important; }
+          .nav-bar { height: 70px !important; padding: 0 16px !important; }
+          .nav-logo { height: 80px !important; }
+          .nav-tagline { font-size: 14px !important; }
         }
       `}</style>
     </nav>

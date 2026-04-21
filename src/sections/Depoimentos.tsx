@@ -23,7 +23,9 @@ export default function Depoimentos() {
     <section style={{
       backgroundColor: '#f5f5f5',
       padding: '70px 48px',
-    }}>
+    }}
+    className="dep-section"
+    >
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
         {/* Título */}
@@ -42,7 +44,7 @@ export default function Depoimentos() {
         </h2>
 
         {/* Cards */}
-        <div style={{
+        <div className="dep-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '24px',

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import iconPPF from '../assets/icons_card/icon-ppf.svg'
 import iconPelicula from '../assets/icons_card/icon-pelicula.svg'
 import iconRevestimento from '../assets/icons_card/icon-revestimento-ceramico.svg'
@@ -6,17 +7,18 @@ import iconEstetica from '../assets/icons_card/icon-estetica.svg'
 import iconFunilaria from '../assets/icons_card/icon-funilaria.svg'
 
 const servicos = [
-  { icon: iconPPF,          titulo: 'PPF' },
-  { icon: iconPelicula,     titulo: 'Película Automotiva' },
-  { icon: iconRevestimento, titulo: 'Revestimento Cerâmico' },
-  { icon: iconPintura,      titulo: 'Lavagens' },
-  { icon: iconEstetica,     titulo: 'Vitrificação' },
-  { icon: iconFunilaria,    titulo: 'Higienização' },
+  { icon: iconPPF,          titulo: 'PPF',                   href: '/ppf' },
+  { icon: iconPelicula,     titulo: 'Película Automotiva',   href: null },
+  { icon: iconRevestimento, titulo: 'Revestimento Cerâmico', href: null },
+  { icon: iconPintura,      titulo: 'Lavagens',              href: '/lavagens' },
+  { icon: iconEstetica,     titulo: 'Vitrificação',          href: '/vitrificacao' },
+  { icon: iconFunilaria,    titulo: 'Higienização',          href: null },
 ]
 
 export default function Servicos() {
+  const navigate = useNavigate()
   return (
-    <section id="servicos" style={{
+    <section id="servicos" className="serv-section" style={{
       backgroundColor: '#f5f5f5',
       padding: '240px 48px 90px',
     }}>
@@ -35,7 +37,7 @@ export default function Servicos() {
         </h2>
 
         {/* Grid */}
-        <div style={{
+        <div className="serv-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '28px',
@@ -65,6 +67,14 @@ export default function Servicos() {
                 const el = e.currentTarget as HTMLDivElement
                 el.style.transform = 'translateY(0)'
                 el.style.boxShadow = 'none'
+              }}
+              onClick={() => {
+                if (s.href) {
+                  navigate(s.href)
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                } else {
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }
               }}
             >
 
@@ -96,37 +106,7 @@ export default function Servicos() {
                 {s.titulo}
               </p>
 
-              {/* Saiba mais */}
-              <a
-                href="https://wa.me/5581920008301"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: 'Barlow, sans-serif',
-                  fontWeight: 600,
-                  fontSize: '12px',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: '#C9A84C',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid #C9A84C44',
-                  paddingBottom: '2px',
-                  transition: 'color 0.2s, border-color 0.2s',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.color = '#fff'
-                  e.currentTarget.style.borderColor = '#fff'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color = '#C9A84C'
-                  e.currentTarget.style.borderColor = '#C9A84C44'
-                }}
-              >
-                Saiba mais →
-              </a>
+
             </div>
           ))}
         </div>

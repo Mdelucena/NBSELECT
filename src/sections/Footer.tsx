@@ -16,7 +16,7 @@ export default function Footer() {
     <footer id="contato" style={{ backgroundColor: '#0A0A0A' }}>
 
       {/* Bloco principal */}
-      <div style={{
+      <div className="footer-grid" style={{
         maxWidth: '1400px',
         margin: '0 auto',
         padding: '70px 48px 50px',
@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
 
         {/* Informações */}
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', overflow: 'hidden', zIndex: 1 }}>
 
           {/* Logo de fundo */}
           <img
@@ -60,6 +60,8 @@ export default function Footer() {
               width: 'auto',
               pointerEvents: 'none',
               userSelect: 'none',
+              opacity: 0.06,
+              zIndex: 0,
             }}
           />
 
@@ -161,7 +163,7 @@ export default function Footer() {
         margin: '0 auto',
         padding: '0 48px 50px',
       }}>
-        <div style={{
+        <div className="footer-cta" style={{
           backgroundColor: '#fff',
           borderRadius: '12px',
           padding: '36px 48px',
@@ -219,7 +221,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{
+      <div className="footer-bottom" style={{
         borderTop: '1px solid #1a1a1a',
         padding: '20px 48px',
         display: 'flex',
@@ -259,8 +261,20 @@ export default function Footer() {
 
       <style>{`
         @media (max-width: 768px) {
-          footer > div:first-child > div {
+          .footer-grid {
             grid-template-columns: 1fr !important;
+            padding: 48px 20px 32px !important;
+            gap: 36px !important;
+          }
+          footer .footer-cta {
+            padding: 28px 20px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          footer .footer-bottom {
+            padding: 20px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
           }
         }
       `}</style>

@@ -140,9 +140,10 @@ export default function Historia() {
       {/* Responsive mobile */}
       <style>{`
         @media (max-width: 768px) {
+          #sobre { padding: 60px 20px 80px !important; }
           #sobre > div {
             grid-template-columns: 1fr !important;
-            gap: 50px !important;
+            gap: 40px !important;
           }
         }
       `}</style>
